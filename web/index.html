@@ -4,27 +4,46 @@
     </head>
 
     <body>
+        <!-- Das Eingabgefeld, wo der User Befehle eingeben kann. -->
         <input type="text">
 
+        <!-- Das Ausgabefeld, wo der geschriebene Befehl und
+             alle bereits ausgeführten Befehle aufegelistet werden. -->
         <p></p>
 
         <script>
+            // Diese Funktion wird jedes mal ausgeführt,
+            // wenn der User etwas in das Eingabefeld tippt.
             function onInput(event) {
+                // Wir holen uns die Taste, die gerade vom User getippt worden ist.
                 const key = event.key;
+                // Der volle Text, der gerade im Eingabefeld steht.
                 const value = event.target.value;
 
+                // Wenn der User die "Enter"-Taste gedrückt hat,
+                // dann wollen wir den Befehl ausführen.
                 if (key == "Enter" && value.match(/\S+/)) {
-                    event.target.value = "";
+                    // Wir fügen den derzeitigen Befehl zur Historie hinzu.
                     commandHistory.push(currentCommand);
+                    // Das Eingabefeld wird geleert.
+                    event.target.value = "";
+                    // Der derzeitig gespeicherte Befehl-Text wird geleert.
                     currentCommand = "";
                 } else {
+                    // Der User hat einen Buchstaben ins Eingabefeld geschrieben.
+                    // Wir setzen den gespeicherten Befehl-Text zum vollen Text,
+                    // der im Eingabefeld steht.
                     currentCommand = value;
                 }
 
+                // Update die Ausgabe.
                 updateOutput();
             }
 
+            // Diese Funktion schreibt den derzeitigen Befehl und
+            // alle vorrigen Befehle ins Ausgabefeld.
             function updateOutput() {
+                // TODO: Too advanced
                 outputElement.innerHTML = `<ul>
                     <li>${currentCommand}</li>
                     ${
@@ -35,13 +54,21 @@
                     }</ul>`;
             }
 
+            // Wir holen uns das Eingabefeld aus dem HTML.
             const inputElement = document.querySelector("input");
+            // Wir holen uns das Ausgabefeld aus dem HTML.
             const outputElement = document.querySelector("p");
 
+            // Wir initialisieren den derzeitigen Befehl als einen leeren Text.
             let currentCommand = "";
+            // Wir initialisieren die Befehl-Historie als ein leeres Array.
             let commandHistory = [];
 
+            // Wir sagen dem Browser, dass er unsere Funktion "onInput" ausführen soll,
+            // wenn der User eine Taste im Eingabefeld getippt hat (losgelassen hat).
             inputElement.addEventListener("keyup", onInput);
+
+            // Wir generieren den initialen output, einmalig.
             updateOutput();
         </script>
     </body>
