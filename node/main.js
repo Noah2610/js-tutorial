@@ -28,7 +28,7 @@ function start(link) {
 //   txt  : Der Text, der ausgegeben werden soll.
 //   link : Der Link (oder das Programm), das geöffnet werden soll.
 function command(txt, link) {
-    // Gib zuerst
+    // Gib zuerst den gegebenen Text in der Konsole aus.
     msg(txt);
     // Öffne den Link oder das Programm.
     start(link);
