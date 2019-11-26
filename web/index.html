@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Hello HTML!!!!</title>
+    </head>
+
+    <body>
+        <input type="text">
+
+        <p></p>
+
+        <script>
+            function onInput(event) {
+                const key = event.key;
+                const value = event.target.value;
+
+                if (key == "Enter" && value.match(/\S+/)) {
+                    event.target.value = "";
+                    commandHistory.push(currentCommand);
+                    currentCommand = "";
+                } else {
+                    currentCommand = value;
+                }
+
+                updateOutput();
+            }
+
+            function updateOutput() {
+                outputElement.innerHTML = `<ul>
+                    <li>${currentCommand}</li>
+                    ${
+                        commandHistory
+                            .map(cmd => `<li>${cmd}</li>`)
+                            .reverse()
+                            .join("")
+                    }</ul>`;
+            }
+
+            const inputElement = document.querySelector("input");
+            const outputElement = document.querySelector("p");
+
+            let currentCommand = "";
+            let commandHistory = [];
+
+            inputElement.addEventListener("keyup", onInput);
+            updateOutput();
+        </script>
+    </body>
+</html>
