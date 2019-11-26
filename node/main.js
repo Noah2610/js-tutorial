@@ -50,7 +50,7 @@ function run() {
         command("Google wird geöffnet...", "https://google.com");
 
     } else if (answer == "y") {
-        // Wenn der User ein "y" eingegeben hat, dann wird Google geöffnet.
+        // Wenn der User ein "y" eingegeben hat, dann wird Youtube geöffnet.
         command("Youtube wird geöffnet...", "https://youtube.com");
 
     } else {
