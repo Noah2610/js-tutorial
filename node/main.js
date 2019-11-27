@@ -10,6 +10,14 @@ const chalk = require("chalk");
 // Mit "exec" können wir dann Konsolen-Befehle ausführen (Batch).
 const exec = require("child_process").execSync;
 
+const MAX_FAILURES = 3;
+let timesFailed = 0;
+let isRunning = true;
+
+function cls() {
+    msg("\033c")
+}
+
 // Hiermit schreiben wir einfach den gegebenen Text zur Konsole.
 function msg(txt) {
     console.log(txt);
@@ -34,35 +42,66 @@ function command(txt, link) {
     start(link);
 }
 
+// Teile dem User mit, dass das Programm sich eine Eingabe erwartet.
+function printMsgs() {
+    msg(chalk.white("G = Google"))
+    msg(chalk.red("Y = Youtube"))
+    msg(chalk.yellow("E = Explorer"))
+    msg(chalk.green("C = Commander"))
+}
+
 // Hier läuft der Haupt Code.
 function run() {
-    // Teile dem User mit, dass das Programm sich eine Eingabe erwartet.
-    msg("Eingabe:");
+    printMsgs();
 
     // Lies die Eingabe vom User.
     // Wartet bis der User "Enter" drückt, und setzt den eingegebenen
     // Text dann als "answer" Variable.
     // Der eingegebene Text wird auch gleich klein gemacht ("AbC" -> "abc").
-    let answer = rl.question().toLowerCase();
+    const answer = rl
+      .question()
+      .toLowerCase()
+      .charAt(0);
 
-    if (answer == "g") {
-        // Wenn der User ein "g" eingegeben hat, dann wird Google geöffnet.
-        command("Google wird geöffnet...", "https://google.com");
+    cls();
 
-    } else if (answer == "y") {
-        // Wenn der User ein "y" eingegeben hat, dann wird Youtube geöffnet.
-        command("Youtube wird geöffnet...", "https://youtube.com");
+    switch (answer) {
+        case "g" :
+            isRunning = false
+            command(chalk.white("Google wird gestarted... "), "https://www.google.at")
+            break
 
-    } else {
-        // Wenn der User keinen der akzeptierten Befehle angegeben hat,
-        // dann wird eine Fehlermeldung, mit roter Hintergrundfarbe ausgegeben.
-        msg(chalk.black.bgRed("Falsche eingabe..."))
+        case "y" :
+            isRunning = false
+            command(chalk.red("Youtube wird gestarted..."), "https://www.youtube.at")
+            break
+
+        case "e" :
+            isRunning = false
+            command(chalk.yellow("Explorer wird gestarted..."), "explorer")
+            break
+
+        case "c" :
+            isRunning = false
+            command(chalk.green("Commander wird gestarted..."), "cmd")
+            break
+
+        default:
+            msg(chalk.black.bgRed("Falsche Eingabe..."))
+
+            timesFailed = timesFailed + 1
+
+            if (timesFailed == MAX_FAILURES) {
+                isRunning = false
+                cls()
+                msg(chalk.black.bgRed("Das Programm wurde geschlossen..."))
+            }
     }
 }
 
 // Diese "while" Schleife (loop) wird endlos ausgeführt,
 // weil der Wert "true" immer "true" sein wird.
-while (true) {
+while (isRunning) {
     // Wir führen einfach unsere "run()" Funktionen jedes Mal aus.
     run();
 }
