@@ -9,37 +9,54 @@ const rawData = fs.readFileSync("data.json", "utf8");
 // JavaScript Objekt verwandeln mit der Funktion "JSON.parse()".
 const data = JSON.parse(rawData);
 
-// Jetzt wollen wir mal eine Eingabe vom User bekommen.
-// Wir machen auch die Eingabe klein und holen uns nur
-// den ersten Buchstaben der Eingabe.
-const answer = rl
-    .question("Answer: ")
-    .toLowerCase()
-    .charAt(0);
+// Diese Variable soll sagen, ob der eingegebene Befehl vom User
+// gefunden und ausgeführt worden ist.
+let hasRunCommand = false;
 
-// Jetzt wollen wir über alle commands in unserem "data" drüber gehen,
-// um zu überprüfen welchen Befehl der User mit seiner Eingabe ausführen will.
+// Wir führen das den Code aus, bis der User einen richtigen
+// Befehl eingegeben hat.
+while (!hasRunCommand) {
+    // Wir holen uns mal eine Eingabe vom User.
+    // Wir machen auch die Eingabe klein und holen uns nur
+    // den ersten Buchstaben der Eingabe.
+    const answer = rl
+        .question("Answer: ")
+        .toLowerCase()
+        .charAt(0);
 
-// Wir setzen      Die Schleife soll      Jedes Mal wenn der Code
-// die Variable    so für die Länge       in der Schleife ausgeführt
-// "i" als erstes  von unseren commands   wird wollen wir die "i" Variable
-// auf 0.          laufen.                um Eins erhöhen.
-//   vvvvvvvvv  vvvvvvvvvvvvvvvvvvvvvvvv  vvv
-for (let i = 0; i < data.commands.length; i++) {
-    // Wir holen uns den command, der an der "i"-ten stelle liegt.
-    const command = data.commands[i];
-    // Dann können wir vergleichen, ob der User den richtigen
-    // Buchstaben für diesen command eingegeben hat.
-    if (command.input == answer) {
-        // Wir geben zuerst die message zum command
-        // aus, danach führen wir den Konsolen Befehl
-        // zum command aus.
-        console.log(command.msg);
-        exec(command.cmd);
+    // Jetzt wollen wir über alle commands in unserem "data" drüber gehen,
+    // um zu überprüfen welchen Befehl der User mit seiner Eingabe ausführen will.
 
-        // Da der richtige Befehl gefunden worden ist, wollen
-        // wir gar nicht mehr die anderen Befehle ausprobieren.
-        // Mit "break" brechen wir aus der Schleife aus.
-        break;
+    // Wir setzen      Die Schleife soll      Jedes Mal wenn der Code
+    // die Variable    so für die Länge       in der Schleife ausgeführt
+    // "i" als erstes  von unseren commands   wird wollen wir die "i" Variable
+    // auf 0.          laufen.                um Eins erhöhen.
+    //   vvvvvvvvv  vvvvvvvvvvvvvvvvvvvvvvvv  vvv
+    for (let i = 0; i < data.commands.length; i++) {
+        // Wir holen uns den command, der an der "i"-ten stelle liegt.
+        const command = data.commands[i];
+        // Dann können wir vergleichen, ob der User den richtigen
+        // Buchstaben für diesen command eingegeben hat.
+        if (command.input == answer) {
+            // Wir geben zuerst die message zum command
+            // aus, danach führen wir den Konsolen Befehl
+            // zum command aus.
+            console.log(command.msg);
+            exec(command.cmd);
+            // Wir setzen "hasRunCommand" zu "true",
+            // damit die "while" Schleife beendet wird.
+            hasRunCommand = true;
+
+            // Da der richtige Befehl gefunden worden ist, wollen
+            // wir gar nicht mehr die anderen Befehle ausprobieren.
+            // Mit "break" brechen wir aus der Schleife aus.
+            break;
+        }
+    }
+
+    // Wenn zu der Eingabe vom User kein Befehl gefunden worden ist,
+    // dann wollen wir eine Fehlermeldung ausgeben.
+    if (!hasRunCommand) {
+        console.log("Falsche Eingabe...")
     }
 }
