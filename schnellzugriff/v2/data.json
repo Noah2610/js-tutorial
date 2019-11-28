@@ -1,0 +1,14 @@
+{
+    "commands": [
+        {
+            "input": "g",
+            "cmd": "start https://google.com",
+            "msg": "Google wird gestartet..."
+        },
+        {
+            "input": "y",
+            "cmd": "start https://youtube.com",
+            "msg": "Youtube wird gestartet..."
+        }
+    ]
+}
